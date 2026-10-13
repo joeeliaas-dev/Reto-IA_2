@@ -1,0 +1,1289 @@
+/* ==========================================================================
+   EL CAFÉ DE DON PEDRO — HOJA DE ESTILOS GLOBAL (4 PÁGINAS)
+   Sistema de diseño: "Touchy Coffee — Style Reference"
+   Zine de café pintado a mano: bandas de color a sangre, etiquetas tipo
+   máquina de escribir y botones en pastilla extrema.
+
+   REGLAS APLICADAS
+   - Diseño plano: bloques de color sólido, sin degradados, sin sombras
+     y sin efectos de cristal.
+   - Controles (botones, inputs, etiquetas): pastilla de 100px.
+   - Tarjetas e imágenes: 20px.
+   - Todo el texto legible en monoespaciada; solo el logotipo usa Script.
+
+   ÍNDICE
+   1. Tokens          5. Tarjetas y etiquetas     9. Visítanos
+   2. Base            6. Inicio                  10. Contacto
+   3. Animaciones     7. Menú y promociones      11. Pie y ticker
+   4. Botones y nav   8. Bandas de sección       12. Responsive
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. TOKENS
+   ========================================================================== */
+:root {
+  /* Color */
+  --color-ink: #000000;
+  --color-sage: #788c8c;
+  --color-cream: #ffffff;
+  --color-terracotta: #9f4920;
+  --color-lavender: #a697c6;
+  --color-moss: #5b9133;
+  --color-sunshine: #fff78f;
+  --color-sky: #d0eaf4;
+  --color-pink: #f5b5c8;
+
+  /* Tipografía */
+  --font-apercu-mono: 'Apercu Mono', 'Space Mono', 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-touchy-script-custom: 'Touchy Script (custom)', 'Caveat Brush', 'Permanent Marker', cursive;
+
+  --text-subheading: 20px;
+  --text-heading-sm: 24px;
+  --text-display: 50px;
+  --text-body: 16px;
+
+  /* Espaciado (base 4px) */
+  --spacing-20: 20px;
+  --spacing-40: 40px;
+  --spacing-60: 60px;
+  --spacing-80: 80px;
+  --spacing-100: 100px;
+
+  /* Capas de layout */
+  --section-gap: 80px;
+  --card-padding: 20px;
+  --element-gap: 20px;
+  --band-pad: clamp(20px, 5vw, 80px);
+  --ticker-h: 52px;
+
+  /* Radios */
+  --radius-cards: 20px;
+  --radius-images: 20px;
+  --radius-full: 100px;
+}
+
+
+/* ==========================================================================
+   2. RESET Y BASE
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-apercu-mono);
+  font-size: var(--text-body);
+  line-height: 1.5;
+  color: var(--color-ink);
+  background-color: var(--color-sage);
+  /* espacio para el ticker fijo inferior */
+  padding-bottom: var(--ticker-h);
+  overflow-x: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--spacing-20);
+  z-index: 300;
+  padding: 10px 20px;
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: var(--radius-full);
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Tipografía utilitaria */
+.display {
+  font-size: clamp(30px, 6vw, var(--text-display));
+  line-height: 1.2;
+  font-weight: 700;
+  margin-bottom: var(--spacing-20);
+}
+
+.lead {
+  font-size: var(--text-subheading);
+  line-height: 1.5;
+  max-width: 62ch;
+}
+
+.card-title {
+  font-size: var(--text-heading-sm);
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.underline {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+  font-weight: 700;
+}
+
+/* Logotipo: la ÚNICA pieza en Script */
+.wordmark {
+  display: inline-block;
+  font-family: var(--font-touchy-script-custom);
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-ink);
+}
+
+.wordmark--hero {
+  font-size: clamp(64px, 13vw, 180px);
+}
+
+.wordmark--sm {
+  font-size: clamp(48px, 7vw, 76px);
+}
+
+
+/* ==========================================================================
+   3. ANIMACIONES Y TRANSICIONES
+   ========================================================================== */
+
+/* ---- 3.1 Transiciones :hover (botones, tarjetas, pastillas, enlaces) ---- */
+
+/*
+████████████████████████████████████████████████████████████████████████████
+██                                                                        ██
+██   ▼▼▼  [1 de 3]  DURACIÓN DE LAS TRANSICIONES :HOVER  ▼▼▼              ██
+██        (botones, pastillas, tarjetas, imágenes y enlaces)              ██
+██                                                                        ██
+████████████████████████████████████████████████████████████████████████████
+*/
+.btn,
+.filter-pill,
+.step,
+.add-link,
+.card,
+.product-media img,
+.wordmark,
+.text-link,
+.field-control {
+  /* AQUI PUEDES MODIFICAR LA DURACIÓN PARA TU VIDEO DEMOSTRATIVO */
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.wordmark:hover {
+  transform: rotate(-2deg) scale(1.03);
+}
+
+/* ---- 3.2 Aparición de tarjetas (al cargar / al hacer scroll) ---- */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* El script añade .js al <html>; sin JS todo se ve normal */
+.js .reveal:not(.is-visible) {
+  opacity: 0;
+}
+
+/*
+████████████████████████████████████████████████████████████████████████████
+██                                                                        ██
+██   ▼▼▼  [2 de 3]  DURACIÓN DE LA APARICIÓN DE TARJETAS (rise-in)  ▼▼▼    ██
+██                                                                        ██
+████████████████████████████████████████████████████████████████████████████
+*/
+.js .reveal.is-visible {
+  /* AQUI PUEDES MODIFICAR LA DURACIÓN PARA TU VIDEO DEMOSTRATIVO */
+  animation: rise-in 0.7s ease-out backwards;
+}
+
+/* Cascada: cada columna entra con un pequeño retraso */
+.js .reveal.is-visible:nth-child(3n + 2) {
+  animation-delay: 0.12s;
+}
+
+.js .reveal.is-visible:nth-child(3n + 3) {
+  animation-delay: 0.24s;
+}
+
+/* ---- 3.3 Ticker inferior en movimiento infinito ---- */
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* (la regla .ticker-track con la duración está en la sección 11) */
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal:not(.is-visible) {
+    opacity: 1;
+  }
+
+  .js .reveal.is-visible {
+    animation: none;
+  }
+
+  .ticker-track {
+    animation: none !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+
+/* ==========================================================================
+   4. BOTONES Y NAVEGACIÓN EN PASTILLA
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 10px 20px;
+  font-family: inherit;
+  font-size: var(--text-subheading);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+
+.btn--ink {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+}
+
+.btn--ink:hover {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  transform: translateY(-3px);
+}
+
+.btn--cream {
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+}
+
+.btn--cream:hover {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+  transform: translateY(-3px);
+}
+
+.btn--ghost {
+  background-color: transparent;
+  color: var(--color-ink);
+}
+
+.btn--ghost:hover {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+  transform: translateY(-3px);
+}
+
+.btn--sm {
+  min-height: 44px;
+  font-size: var(--text-body);
+  padding: 8px 18px;
+}
+
+.btn--block {
+  width: 100%;
+}
+
+/* Página actual en la navegación */
+.btn[aria-current="page"] {
+  background-color: var(--color-sunshine);
+  color: var(--color-ink);
+}
+
+.pill-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--element-gap);
+}
+
+.pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.text-link {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+  font-weight: 700;
+}
+
+.text-link:hover {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+}
+
+
+/* ==========================================================================
+   5. TARJETAS Y ETIQUETAS
+   ========================================================================== */
+.card {
+  background-color: var(--color-cream);
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+}
+
+/* Tarjetas de color sólido: el color ES la tarjeta */
+.color-card {
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+}
+
+.color-card--terracotta {
+  background-color: var(--color-terracotta);
+}
+
+.color-card--moss {
+  background-color: var(--color-moss);
+}
+
+.color-card--lavender {
+  background-color: var(--color-lavender);
+}
+
+/* Etiqueta pastilla */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  margin-bottom: var(--spacing-20);
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-full);
+  font-size: var(--text-body);
+  font-weight: 700;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.tag--static {
+  margin-bottom: 0;
+}
+
+/* Pastilla de solo lectura (selector de tamaño / precio) */
+.pill-ghost {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 48px;
+  padding: 10px 20px;
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-full);
+  font-size: var(--text-body);
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.pill-ghost strong {
+  font-size: var(--text-subheading);
+  white-space: nowrap;
+}
+
+.stars {
+  display: flex;
+  gap: 6px;
+  margin-bottom: var(--spacing-20);
+}
+
+.stars svg {
+  width: 28px;
+  height: 28px;
+  fill: var(--color-pink);
+}
+
+
+/* ==========================================================================
+   6. INICIO (HERO + HISTORIA)
+   ========================================================================== */
+.site-header {
+  padding-top: var(--spacing-20);
+  padding-bottom: var(--spacing-40);
+}
+
+.site-header .wordmark {
+  display: block;
+  margin: var(--spacing-20) auto 0;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--element-gap);
+  padding-top: var(--spacing-20);
+  padding-bottom: var(--spacing-80);
+}
+
+.hero-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: var(--text-subheading);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.tagline {
+  font-size: var(--text-subheading);
+  font-weight: 700;
+  text-transform: uppercase;
+  max-width: 34ch;
+}
+
+.hero-card {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--element-gap);
+}
+
+.hero-card p {
+  font-size: var(--text-subheading);
+  line-height: 1.5;
+}
+
+.stamps {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.stamp {
+  padding: 8px 18px;
+  background-color: var(--color-cream);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-full);
+  font-size: var(--text-body);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.history-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-40);
+  align-items: start;
+}
+
+.history-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--element-gap);
+  padding: 28px;
+}
+
+.history-card p {
+  line-height: 1.6;
+}
+
+.history-card .lead-text {
+  font-size: var(--text-subheading);
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--element-gap);
+  padding-top: var(--spacing-20);
+  border-top: 1px solid var(--color-ink);
+}
+
+.stat-number {
+  font-size: clamp(24px, 4vw, 40px);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.stat-label {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.collage {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--element-gap);
+}
+
+.collage-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.collage-card img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-images);
+}
+
+.collage-card figcaption {
+  font-size: var(--text-body);
+  font-weight: 700;
+}
+
+.quote-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-40);
+}
+
+.quote-card {
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+}
+
+.quote-text {
+  font-size: var(--text-heading-sm);
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: var(--spacing-20);
+}
+
+.byline {
+  margin-top: auto;
+  font-size: var(--text-subheading);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+
+/* ==========================================================================
+   7. MENÚ Y PROMOCIONES (TARJETA DE PRODUCTO)
+   ========================================================================== */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: var(--spacing-20);
+}
+
+.filter-pill {
+  min-height: 44px;
+  padding: 8px 20px;
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-full);
+  font-size: var(--text-body);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.filter-pill:hover {
+  transform: translateY(-3px);
+  background-color: var(--color-sunshine);
+}
+
+.filter-pill.is-active {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+}
+
+.results-count {
+  margin-bottom: var(--spacing-40);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-40);
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.product-media {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-images);
+  background-color: var(--color-sage);
+}
+
+.product-media img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.product-card:hover .product-media img {
+  transform: scale(1.06);
+}
+
+/* Etiqueta de origen: sello en la esquina de la foto */
+.origin-label {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  max-width: calc(100% - 24px);
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-body);
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.origin-label--terra {
+  background-color: var(--color-terracotta);
+  color: var(--color-cream);
+}
+
+.origin-label--ink {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+}
+
+.origin-label--pink {
+  background-color: var(--color-pink);
+  color: var(--color-ink);
+}
+
+.product-name {
+  font-size: var(--text-subheading);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.product-desc {
+  flex-grow: 1;
+  line-height: 1.55;
+}
+
+.product-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Pastilla "- 1 + | PEDIR" */
+.add-pill {
+  display: flex;
+  align-items: stretch;
+  min-height: 48px;
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background-color: var(--color-cream);
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  padding: 0 6px;
+}
+
+.step {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-subheading);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.step:hover {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+}
+
+.qty {
+  min-width: 2ch;
+  text-align: center;
+  font-size: var(--text-subheading);
+  font-weight: 700;
+}
+
+.add-link {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-left: 1px solid var(--color-ink);
+  font-size: var(--text-subheading);
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.add-link:hover {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+}
+
+.add-pill--solo .add-link {
+  border-left: none;
+}
+
+.product-card .btn {
+  font-size: var(--text-body);
+}
+
+
+/* ==========================================================================
+   8. BANDAS DE SECCIÓN (muros pintados a sangre)
+   ========================================================================== */
+.band {
+  padding: var(--spacing-80) var(--band-pad);
+}
+
+.band--terracotta { background-color: var(--color-terracotta); }
+.band--sage       { background-color: var(--color-sage); }
+.band--sky        { background-color: var(--color-sky); }
+.band--sunshine   { background-color: var(--color-sunshine); }
+.band--lavender   { background-color: var(--color-lavender); }
+
+.section-head {
+  max-width: 900px;
+  margin-bottom: var(--spacing-40);
+}
+
+
+/* ==========================================================================
+   9. VISÍTANOS
+   ========================================================================== */
+.visit-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-40);
+  align-items: start;
+}
+
+.info-stack {
+  display: grid;
+  gap: var(--element-gap);
+}
+
+.info-card p {
+  font-size: var(--text-subheading);
+  line-height: 1.45;
+}
+
+.info-card .tag {
+  margin-bottom: 12px;
+}
+
+.map-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--element-gap);
+}
+
+.map-card iframe {
+  width: 100%;
+  height: 420px;
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius-images);
+  background-color: var(--color-sky);
+}
+
+.services-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-40);
+  margin-top: var(--spacing-40);
+}
+
+.service-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: var(--spacing-20);
+}
+
+.service-list li {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 10px 20px;
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.drive-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 28px;
+}
+
+.drive-card p {
+  line-height: 1.6;
+}
+
+
+/* ==========================================================================
+   10. CONTACTO (FORMULARIO)
+   ========================================================================== */
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-40);
+  align-items: start;
+}
+
+.form-card {
+  padding: 28px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--element-gap);
+}
+
+.field label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: var(--text-body);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.field-control {
+  display: block;
+  width: 100%;
+  min-height: 56px;
+  padding: 12px 28px;
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-full);
+  font-size: var(--text-body);
+  line-height: 1.4;
+}
+
+.field-control::placeholder {
+  color: #4a4a4a;
+}
+
+.field-control:hover {
+  background-color: var(--color-sky);
+}
+
+.field-control:focus {
+  background-color: var(--color-sunshine);
+}
+
+textarea.field-control {
+  min-height: 170px;
+  padding: 22px 34px;
+  resize: vertical;
+}
+
+select.field-control {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 60px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 20px center;
+  background-size: 26px 26px;
+  cursor: pointer;
+}
+
+.submit-pill {
+  width: 100%;
+  gap: 16px;
+}
+
+.submit-pill .divider {
+  width: 1px;
+  height: 24px;
+  background-color: var(--color-cream);
+}
+
+.submit-pill:hover .divider {
+  background-color: var(--color-ink);
+}
+
+.form-note {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.form-status {
+  padding: var(--card-padding);
+  border-radius: var(--radius-cards);
+  background-color: var(--color-moss);
+  font-size: var(--text-subheading);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.contact-aside {
+  display: grid;
+  gap: var(--spacing-40);
+}
+
+.aside-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 28px;
+}
+
+.aside-card p {
+  line-height: 1.5;
+}
+
+.aside-card .detail-label {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.price-list {
+  display: grid;
+  gap: 10px;
+}
+
+
+/* ==========================================================================
+   11. PIE DE PÁGINA Y TICKER INFERIOR
+   ========================================================================== */
+.site-footer {
+  padding-top: var(--spacing-60);
+  padding-bottom: var(--spacing-40);
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-40);
+  padding-bottom: var(--spacing-40);
+  border-bottom: 2px solid var(--color-ink);
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--element-gap);
+}
+
+.footer-brand .wordmark {
+  text-align: left;
+}
+
+.footer-brand p {
+  max-width: 38ch;
+  line-height: 1.6;
+}
+
+.footer-col h2 {
+  margin-bottom: 16px;
+  font-size: var(--text-subheading);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.footer-col ul {
+  display: grid;
+  gap: 10px;
+}
+
+.footer-col p {
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.copyright {
+  padding-top: var(--spacing-20);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+/* Ticker fijo, siempre visible en la parte inferior */
+.ticker {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  height: var(--ticker-h);
+  overflow: hidden;
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+}
+
+/*
+████████████████████████████████████████████████████████████████████████████
+██                                                                        ██
+██   ▼▼▼  [3 de 3]  DURACIÓN DEL TICKER INFERIOR (movimiento infinito) ▼▼▼ ██
+██        número menor = más rápido · número mayor = más lento            ██
+██                                                                        ██
+████████████████████████████████████████████████████████████████████████████
+*/
+.ticker-track {
+  display: flex;
+  flex-shrink: 0;
+  width: max-content;
+  white-space: nowrap;
+  /* AQUI PUEDES MODIFICAR LA DURACIÓN PARA TU VIDEO DEMOSTRATIVO */
+  animation: ticker-scroll 30s linear infinite;
+}
+
+.ticker:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+.ticker-group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ticker-item {
+  padding: 0 24px;
+  font-size: var(--text-subheading);
+  text-transform: uppercase;
+}
+
+.ticker-leaf {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  fill: var(--color-terracotta);
+}
+
+
+/* ==========================================================================
+   12. RESPONSIVE (mobile-first)
+   ========================================================================== */
+@media (max-width: 479px) {
+  .btn {
+    font-size: var(--text-body);
+  }
+
+  .hero-card p,
+  .lead,
+  .info-card p {
+    font-size: var(--text-body);
+  }
+
+  .service-list li {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 639px) {
+  .band {
+    padding-top: var(--spacing-60);
+    padding-bottom: var(--spacing-60);
+  }
+
+  .site-header {
+    padding-top: var(--spacing-20);
+    padding-bottom: var(--spacing-40);
+  }
+
+  .hero {
+    padding-bottom: var(--spacing-60);
+  }
+
+  .history-card,
+  .quote-card,
+  .drive-card,
+  .form-card,
+  .aside-card {
+    padding: var(--card-padding);
+  }
+
+  .pill-group {
+    width: 100%;
+  }
+
+  .pill-group .btn {
+    flex: 1;
+  }
+
+  .ticker-item {
+    font-size: var(--text-body);
+  }
+}
+
+@media (min-width: 640px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .collage {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .collage-card:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .collage-card:first-child img {
+    aspect-ratio: 16 / 9;
+  }
+
+  .service-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .field--full {
+    grid-column: 1 / -1;
+  }
+
+  .submit-pill {
+    width: auto;
+    justify-self: start;
+  }
+}
+
+@media (min-width: 960px) {
+  .history-grid {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+
+  .quote-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .visit-layout {
+    grid-template-columns: 0.9fr 1.1fr;
+  }
+
+  .services-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .contact-layout {
+    grid-template-columns: 1.25fr 0.75fr;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1.4fr 1fr 1.4fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
